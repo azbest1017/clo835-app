@@ -1,14 +1,3 @@
--- Create root user for remote access
-CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY 'root123';
-
--- Grant all privileges
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
-
--- Set password for localhost root
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'root123';
-
-FLUSH PRIVILEGES;
-
 -- Create database
 CREATE DATABASE IF NOT EXISTS appdb;
 USE appdb;

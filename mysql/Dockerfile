@@ -1,5 +1,7 @@
 FROM mysql:8.0
 
-COPY ./mysql.sql /tmp
+# Копируем init script в стандартную папку
+COPY ./mysql.sql /docker-entrypoint-initdb.d/
 
-CMD [ "mysqld", "--init-file=/tmp/mysql.sql" ]
+# Используем стандартный ENTRYPOINT от mysql:8.0
+# Он автоматически выполнит скрипты из /docker-entrypoint-initdb.d/
