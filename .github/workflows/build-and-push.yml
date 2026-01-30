@@ -2,7 +2,12 @@ name: Build and Push Docker Images to ECR
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REGISTRY: 361706076089.dkr.ecr.us-east-1.amazonaws.com
 
 jobs:
   build:
@@ -18,26 +23,17 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build and push application image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: clo835-app
-          IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./application
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t ${{ env.ECR_REGISTRY }}/clo835-app:latest ./application
+          docker push ${{ env.ECR_REGISTRY }}/clo835-app:latest
 
       - name: Build and push MySQL image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: clo835-mysql
-          IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./mysql
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t ${{ env.ECR_REGISTRY }}/clo835-mysql:latest ./mysql
+          docker push ${{ env.ECR_REGISTRY }}/clo835-mysql:latest
