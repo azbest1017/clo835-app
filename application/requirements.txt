@@ -1,4 +1,4 @@
 Flask==2.3.3
-pymysql
+pymysql==1.1.0
 cryptography
 Werkzeug==2.3.7
